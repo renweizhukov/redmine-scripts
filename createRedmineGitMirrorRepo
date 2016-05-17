@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Check the number of arguments.
+if [ "$#" -eq 0 ]; then
+    echo "[ERROR]: No git repo is given!"
+    exit 1
+fi
+
+cd /home/redmine/redmine/repos
+echo "====================start======================"
+
+# Iterate over arguments: clone a mirror git repository ,
+# and fetch all the latest commits in all braches.
+for gitRepo in "$@"
+do
+    if [ ! -d $gitRepo ]; then
+        echo "==============================================="
+        echo "[INFO]: Cloning $gitRepo."
+        git clone --mirror ssh://ssh-username@git.example.com:29418/$gitRepo ./$gitRepo
+        echo "[INOF]: Fetching all commits in all branches of $gitRepo."
+        git -C ./$gitRepo fetch -q --all -p
+        echo "==============================================="
+    else
+        echo "[ERROR]: The git repo already exists!"
+    fi
+done
+
+echo "=====================end======================="

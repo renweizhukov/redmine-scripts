@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Get the current time stamp.
+timestamp=$(date +"%y%m%d-%H%M")
+
+# Backup the redmine wiki.
+mysqldump -u [sql-username] -p[sql-password] [sql-database-name] > /path/to/sqlDump.sql
+
+# Delete the old backup file.
+cd /path/to/backup/file
+find . -name "*.tar.gz" -type f -delete
+
+# Compress the sql file.
+tar -czf backup_$timestamp.tar.gz sqlDump.sql
+
+# Clean up the sql file.
+rm -rf /path/to/sqlDump.sql
